@@ -8,6 +8,11 @@ type Writer interface {
 	WriteCustomers(customers []*model.Customer) (int, error)
 }
 
+// Notifier is the interface to notify that something happened
+type Notifier interface {
+	Notify(string) error
+}
+
 // Reader is the interface that wraps ReadCustomers method
 type Reader interface {
 
