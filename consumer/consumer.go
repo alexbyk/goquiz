@@ -13,5 +13,5 @@ type Reader interface {
 
 	// ReadRecords should read records in chunks. It returns io.EOF (maybe with last records) in the end
 	// If any error occurs, it also returns records that could parse
-	ReadRecords(atMost int) ([][]model.Customer, error)
+	ReadRecords() ([]*model.Customer, error)
 }
