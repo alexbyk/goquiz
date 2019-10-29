@@ -6,6 +6,9 @@ import (
 	"github.com/go-pg/pg/orm"
 )
 
+// Channel is a name of the channel
+const Channel = "app:customers"
+
 // Truncate clears a "customers" table for testing purposes
 func Truncate(db *pg.DB) error {
 	_, err := db.Exec("TRUNCATE TABLE customers RESTART IDENTITY CASCADE")
