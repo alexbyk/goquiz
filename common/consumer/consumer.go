@@ -5,7 +5,7 @@ import "github.com/alexbyk/goquiz/common/model"
 
 // Writer is the interface that allows to save customers in chunks
 type Writer interface {
-	WriteCustomers(customers []model.Customer) error
+	WriteCustomers(customers []*model.Customer) (int, error)
 }
 
 // Reader is the interface that wraps ReadCustomers method
