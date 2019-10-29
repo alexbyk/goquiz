@@ -36,7 +36,7 @@ func TestIsValidCsvHeader(t *testing.T) {
 	ft.NotNil(csvreader.CheckCsvHeader(ok[1:]))
 }
 
-func TestReadRecords(t *testing.T) {
+func TestReadCustomers(t *testing.T) {
 
 	ft := ftest.New(t)
 	in := `id,first_name,last_name,email,phone
@@ -55,7 +55,7 @@ func TestReadRecords(t *testing.T) {
 	r := csvreader.NewReader(strings.NewReader(in), 2)
 
 	for _, test := range tests {
-		records, err := r.ReadRecords()
+		records, err := r.ReadCustomers()
 		ft.Eq(err, test.err).Eq(records, test.customers)
 	}
 
@@ -67,6 +67,6 @@ func TestReadRecordFail(t *testing.T) {
 1,alex,byk,alex@alexbyk.com
 `
 	r := csvreader.NewReader(strings.NewReader(in), 2)
-	_, err := r.ReadRecords()
+	_, err := r.ReadCustomers()
 	ft.NotNil(err)
 }

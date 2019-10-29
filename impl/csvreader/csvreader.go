@@ -40,7 +40,7 @@ func CheckCsvHeader(rec []string) error {
 // Reader reads customers from the source which is csv input
 type Reader struct {
 
-	// How many records to read at most for each ReadRecords invocation
+	// How many records to read at most for each ReadCustomers invocation
 	readCount int
 
 	// How many lines we already read
@@ -68,9 +68,9 @@ func (r *Reader) checkHeader() error {
 	return nil
 }
 
-// ReadRecords returns a slice of records. Error may be io.EOF as well
+// ReadCustomers returns a slice of records. Error may be io.EOF as well
 // It reads as many correct records as posible. May return not empty array with error
-func (r *Reader) ReadRecords() ([]*model.Customer, error) {
+func (r *Reader) ReadCustomers() ([]*model.Customer, error) {
 
 	var customers []*model.Customer
 	var err error
