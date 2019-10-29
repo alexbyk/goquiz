@@ -3,7 +3,6 @@ package pgstorage
 import (
 	"github.com/alexbyk/goquiz/common/model"
 	"github.com/go-pg/pg"
-	"github.com/go-pg/pg/orm"
 )
 
 // Channel is a name of the channel
@@ -28,7 +27,15 @@ func Connect(dsn string) (*pg.DB, error) {
 
 // CreateTable creates a customers table if neccesarry
 func CreateTable(db *pg.DB) error {
-	return db.CreateTable((*Customer)(nil), &orm.CreateTableOptions{IfNotExists: true})
+	_, err := db.Exec(`CREATE TABLE IF NOT EXISTS "customers" (
+  id text NOT NULL default '',
+  first_name text NOT NULL default '',
+  last_name text NOT NULL default '',
+  email text NOT NULL default '',
+  phone text NOT NULL default '',
+  status text NOT NULL default '',
+  PRIMARY KEY ("id"))`)
+	return err
 }
 
 // ConvertModel converts general Customer to our DB Customer
