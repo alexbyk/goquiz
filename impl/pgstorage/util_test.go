@@ -17,10 +17,10 @@ func skipDSN(t *testing.T) *pg.DB {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err != pgstorage.CreateTable(db) {
+	if err = pgstorage.CreateTable(db); err != nil {
 		t.Fatal(err)
 	}
-	if err != pgstorage.Truncate(db) {
+	if err = pgstorage.Truncate(db); err != nil {
 		t.Fatal(err)
 	}
 	return db
