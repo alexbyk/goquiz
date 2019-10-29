@@ -48,11 +48,22 @@ func (c *Consumer) Consume() error {
 		} else if err != nil {
 			return err
 		}
+		if len(customers) < 1 { // no data left
+			continue
+		}
+
 		n, err := c.writer.WriteCustomers(customers)
 		if err != nil {
 			return err
 		}
+		if n < 1 { // nothing was actually stored
+			continue
+		}
+
 		err = c.notifier.Notify(strconv.Itoa(n))
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }

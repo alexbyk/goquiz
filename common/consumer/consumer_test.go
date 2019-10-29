@@ -12,16 +12,16 @@ import (
 
 // mock implementation
 type mReader struct {
-	id int
+	id  int
+	ret []*model.Customer
 }
 
 func (m *mReader) ReadCustomers() ([]*model.Customer, error) {
 	m.id++
-	var err error
 	if m.id > 2 {
-		err = io.EOF
+		return []*model.Customer{}, io.EOF
 	}
-	return []*model.Customer{{ID: strconv.Itoa(m.id)}}, err
+	return []*model.Customer{{ID: strconv.Itoa(m.id)}}, nil
 }
 
 type mWriter struct {
@@ -52,6 +52,6 @@ func TestConsume(t *testing.T) {
 	c := consumer.NewConsumer(r, w, n)
 	err := c.Consume()
 	ft.Nil(err)
-	ft.Eq(w.got, []string{"1", "2", "3"})
-	ft.Eq(n.got, []string{"1", "1", "1"})
+	ft.Eq(w.got, []string{"1", "2"})
+	ft.Eq(n.got, []string{"1", "1"})
 }
