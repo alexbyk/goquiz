@@ -1,6 +1,6 @@
 package integrator
 
-import "github.com/alexbyk/goquiz/model"
+import "github.com/alexbyk/goquiz/common/model"
 
 // Nexter reads customers one by one
 type Nexter interface {

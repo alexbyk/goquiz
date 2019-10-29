@@ -1,7 +1,7 @@
 // Package consumer provides basic interfaces for consumer
 package consumer
 
-import "github.com/alexbyk/goquiz/model"
+import "github.com/alexbyk/goquiz/common/model"
 
 // Writer is the interface that allows to save customers in chunks
 type Writer interface {

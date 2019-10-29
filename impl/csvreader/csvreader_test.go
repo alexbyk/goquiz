@@ -7,7 +7,7 @@ import (
 
 	"github.com/alexbyk/ftest"
 	"github.com/alexbyk/goquiz/impl/csvreader"
-	"github.com/alexbyk/goquiz/model"
+	"github.com/alexbyk/goquiz/common/model"
 )
 
 func TestParseCustomer(t *testing.T) {

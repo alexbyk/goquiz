@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/alexbyk/goquiz/model"
+	"github.com/alexbyk/goquiz/common/model"
 )
 
 // ParseCustomer convers array of strings to the Customer structure
