@@ -28,5 +28,19 @@ func Connect(dsn string) (*pg.DB, error) {
 
 // CreateTable creates a customers table if neccesarry
 func CreateTable(db *pg.DB) error {
-	return db.CreateTable((*model.Customer)(nil), &orm.CreateTableOptions{IfNotExists: true})
+	return db.CreateTable((*Customer)(nil), &orm.CreateTableOptions{IfNotExists: true})
+}
+
+// ConvertModel converts general Customer to our DB Customer
+func ConvertModel(c *model.Customer) *Customer {
+	return &Customer{Customer: c}
+}
+
+// ConvertModels converts array of models
+func ConvertModels(arr []*model.Customer) []*Customer {
+	ret := []*Customer{}
+	for _, cur := range arr {
+		ret = append(ret, ConvertModel(cur))
+	}
+	return ret
 }

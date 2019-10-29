@@ -18,7 +18,8 @@ func NewPgWriter(db *pg.DB) *PgWriter {
 
 // WriteCustomers saves records to db, ignoring duplicates
 func (s *PgWriter) WriteCustomers(records []*model.Customer) (int, error) {
-	ret, err := s.db.Model(&records).OnConflict("DO NOTHING").Insert()
+	m := ConvertModels(records)
+	ret, err := s.db.Model(&m).OnConflict("DO NOTHING").Insert()
 	if err != nil {
 		return 0, err
 	}
