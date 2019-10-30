@@ -2,6 +2,7 @@ package integrator_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/alexbyk/ftest"
 	"github.com/alexbyk/goquiz/common/integrator"
@@ -71,6 +72,7 @@ func TestUsage2(t *testing.T) {
 
 	n.data = data
 	go func() {
+		time.Sleep(time.Second)
 		intg.Stop()
 	}()
 	intg.Start()

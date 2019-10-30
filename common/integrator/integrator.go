@@ -59,6 +59,9 @@ type Integrator struct {
 	// Delay between attempt to retry Publish
 	DelayRetry time.Duration
 
+	// DelayTick is a duration between alive ticks
+	DelayTick time.Duration
+
 	chExit chan struct{} // channel and a flag that we started
 
 	muRunning sync.Mutex
@@ -67,7 +70,7 @@ type Integrator struct {
 
 // NewIntegrator returns an Integrator instance
 func NewIntegrator(n Nexter, l Listener, p Publisher) *Integrator {
-	return &Integrator{nexter: n, listener: l, publisher: p, DelayRetry: DefaultDelayRetry, Logger: &SimpleLogger{}}
+	return &Integrator{nexter: n, listener: l, publisher: p, DelayRetry: DefaultDelayRetry, Logger: &SimpleLogger{}, DelayTick: DefaultDelayTick}
 }
 
 // Start starts a daemon loop, sholdn't be called from multiple threads
@@ -79,14 +82,26 @@ func (i *Integrator) Start() {
 	i.chExit = make(chan struct{})
 	defer close(i.chExit)
 
+	// Check new records periodically in case listener failed
+	var chTick <-chan time.Time
+	if i.DelayTick > 0 {
+		ticker := time.NewTicker(i.DelayTick)
+		defer ticker.Stop()
+		chTick = ticker.C
+	}
+
+	i.Logger.Debug("Starting")
+
 	i.maybeRun() // run at the beginning
 	for {
 		select {
 		case <-i.chExit:
-			log.Println("exit")
+			i.Logger.Debug("Stopping")
 			return
 		case payload := <-chListen:
-			log.Println("Payload: ", payload)
+			i.Logger.Debug("Payload: ", payload)
+		case <-chTick:
+			i.Logger.Debug("Tick")
 		}
 		i.maybeRun()
 	}
@@ -135,7 +150,10 @@ func (i *Integrator) run() {
 		}
 
 		// call Next with a Publish closure. If ErrEmpty, return. Retry otherwise
-		err := i.nexter.Next(func(c *model.Customer) error { return i.publisher.Publish(c) })
+		err := i.nexter.Next(func(c *model.Customer) error {
+			i.Logger.Debug(fmt.Sprintf("Publishind customer %#v", c))
+			return i.publisher.Publish(c)
+		})
 		switch {
 		case err == ErrEmpty:
 			return
