@@ -21,15 +21,17 @@ func ParseCustomer(rec []string) (*model.Customer, error) {
 // ErrEmpty indicates EOF
 var ErrEmpty = fmt.Errorf("Emty queue")
 
-var validHeaderRecord = []string{"id", "first_name", "last_name", "email", "phone"}
+// ValidHeaderRecord is an example of valid header
+var ValidHeaderRecord = []string{"id", "first_name", "last_name", "email", "phone"}
+
 var errInvalidHeader = fmt.Errorf("InvalidHeader")
 
 // CheckCsvHeader returns an error if header isn't correct csv header
 func CheckCsvHeader(rec []string) error {
-	if len(rec) != len(validHeaderRecord) {
+	if len(rec) != len(ValidHeaderRecord) {
 		return errInvalidHeader
 	}
-	for i, v := range validHeaderRecord {
+	for i, v := range ValidHeaderRecord {
 		if rec[i] != v {
 			return errInvalidHeader
 		}
