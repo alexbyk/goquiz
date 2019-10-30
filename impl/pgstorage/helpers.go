@@ -28,7 +28,7 @@ func Connect(dsn string) (*pg.DB, error) {
 // CreateTable creates a customers table if neccesarry
 func CreateTable(db *pg.DB) error {
 	_, err := db.Exec(`CREATE TABLE IF NOT EXISTS "customers" (
-  id text NOT NULL default '',
+  id bigint NOT NULL,
   first_name text NOT NULL default '',
   last_name text NOT NULL default '',
   email text NOT NULL default '',

@@ -72,7 +72,7 @@ func TestUsage2(t *testing.T) {
 
 	n.data = data
 	go func() {
-		time.Sleep(time.Second)
+		time.Sleep(time.Millisecond * 300)
 		intg.Stop()
 	}()
 	intg.Start()
