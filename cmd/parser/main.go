@@ -47,6 +47,6 @@ func main() {
 	checkError(err)
 	defer f.Close()
 
-	consumer := consumer.NewConsumer(csvreader.NewReader(f, chunkSize), pgstorage.NewPgWriter(db), pgstorage.NewPgNotifier(db))
-	checkError(consumer.Consume())
+	cr := consumer.NewConsumer(csvreader.NewReader(f, chunkSize), pgstorage.NewPgWriter(db), pgstorage.NewPgNotifier(db))
+	checkError(cr.Consume())
 }

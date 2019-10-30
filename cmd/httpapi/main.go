@@ -28,5 +28,6 @@ func main() {
 	if listen = os.Getenv("API_LISTEN"); listen == "" {
 		listen = defaultListen
 	}
+	log.Printf("Starting http server on %s", listen)
 	log.Fatal(http.ListenAndServe(defaultListen, nil))
 }
