@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+
+  httpapi:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    working_dir: /app
+    command: ./httpapi
+
+  pg:
+    image: "postgres:alpine"
+    environment:
+      - POSTGRES_USER=demo
+    # command: postgres -c log_statement=all
+
+  integrator:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    depends_on:
+      - pg
+      - httpapi
+    working_dir: /app
+    environment:
+      - DSN=postgres://demo@pg/demo?sslmode=disable
+      - API_ENDPOINT=http://httpapi:8080
+    command: sh -c './wait-for pg:5432 -- ./integrator'
+
+  parser:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    depends_on:
+      - pg
+    working_dir: /app
+    environment:
+      - DSN=postgres://demo@pg/demo?sslmode=disable
+      - CHUNK_SIZE=10 # store 10 records at once
+    command: sh -c './wait-for pg:5432 -- ./parser 1000' # generate csv of 1K records

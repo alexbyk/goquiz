@@ -8,6 +8,9 @@ import (
 	"github.com/go-pg/pg"
 )
 
+// docker run --rm -p 5432:5432 -e POSTGRES_USER=test  postgres:alpine postgres -c log_statement=all
+// TEST_DSN="postgres://test@localhost/test?sslmode=disable" go test -count=1 -v ./...  -timeout 2s
+
 func skipDSN(t *testing.T) *pg.DB {
 	dsn := os.Getenv("TEST_DSN")
 	if dsn == "" {

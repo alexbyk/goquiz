@@ -27,7 +27,12 @@ func Connect(dsn string) (*pg.DB, error) {
 
 // CreateTable creates a customers table if neccesarry
 func CreateTable(db *pg.DB) error {
-	_, err := db.Exec(`CREATE TABLE IF NOT EXISTS "customers" (
+	// create table if not exists may fail on concurency
+	if _, err := db.Exec(`SELECT 1;`); err != nil {
+		return err
+	}
+
+	db.Exec(`CREATE TABLE IF NOT EXISTS "customers" (
   id bigint NOT NULL,
   first_name text NOT NULL default '',
   last_name text NOT NULL default '',
@@ -35,7 +40,8 @@ func CreateTable(db *pg.DB) error {
   phone text NOT NULL default '',
   status text NOT NULL default '',
   PRIMARY KEY ("id"))`)
-	return err
+
+	return nil
 }
 
 // ConvertModel converts general Customer to our DB Customer

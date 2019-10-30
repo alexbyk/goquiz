@@ -15,10 +15,10 @@ import (
 )
 
 const defaultDSN = "postgres://localhost/postgres?sslmode=disable"
-const chunkSize = 10 // 10 lines per once
+const defaultChunkSize = 10 // 10 lines per once
 var usageMsg = fmt.Sprintf(`DSN=%s ./parser ./data.csv`, defaultDSN)
 
-var mockFileSize = 10000
+var mockFileSize = "1000"
 
 func fail(msg interface{}) {
 	fmt.Println(msg, "\n", "Usage example:", "\n\t", usageMsg)
@@ -38,12 +38,23 @@ func main() {
 		dsn = defaultDSN
 	}
 
+	chunkSize := defaultChunkSize
+	if n, err := strconv.Atoi(os.Getenv("CHUNK_SIZE")); err == nil {
+		chunkSize = n
+	}
+	log.Printf("Using CHUNK_SIZE: %v", chunkSize)
+
 	if len(os.Args) < 2 {
-		file := generateMock(mockFileSize)
-		defer os.Remove(file.Name())
-		filepath = file.Name()
+		filepath = mockFileSize
 	} else {
 		filepath = os.Args[1]
+	}
+
+	// if passed arg is a number, generate records
+	if n, err := strconv.Atoi(filepath); err == nil {
+		file := generateMock(n)
+		defer os.Remove(file.Name())
+		filepath = file.Name()
 	}
 
 	db, err := pgstorage.Connect(dsn)

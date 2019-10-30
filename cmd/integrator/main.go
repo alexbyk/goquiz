@@ -26,7 +26,7 @@ func checkError(err error) {
 
 func main() {
 	var endpoint, dsn string
-	if endpoint = os.Getenv("API_LISTEN"); endpoint == "" {
+	if endpoint = os.Getenv("API_ENDPOINT"); endpoint == "" {
 		endpoint = defaultEndpoint
 	}
 
